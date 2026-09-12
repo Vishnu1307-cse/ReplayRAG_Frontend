@@ -419,60 +419,67 @@ export default function StudySessionRecorder() {
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '1.5rem', minHeight: '85vh' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '2rem', minHeight: '88vh' }}>
       
-      {/* LEFT SIDEBAR: SAVED SESSIONS */}
-      <aside className="card-panel" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', height: '100%' }}>
+      {/* LEFT SIDEBAR - Session Manager */}
+      <aside className="card-panel" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', height: 'fit-content' }}>
         <div>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: '700', marginBottom: '0.25rem', color: '#f3f4f6' }}>
-            📚 Study Sessions
-          </h3>
-          <p style={{ fontSize: '0.8rem', color: '#9ca3af' }}>Select a saved session or start a new one</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.4rem' }}>
+            <div style={{
+              width: '10px',
+              height: '10px',
+              borderRadius: '50%',
+              background: 'var(--accent-gradient)',
+              boxShadow: '0 0 12px var(--accent-indigo)'
+            }}></div>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: '700', letterSpacing: '-0.02em', background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Study Sessions
+            </h2>
+          </div>
+          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+            Manage & query recorded sessions
+          </p>
         </div>
 
         {/* Create Session Form */}
-        <form onSubmit={handleCreateSession} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <form onSubmit={handleCreateSession} style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
           <input
             type="text"
             placeholder="New Session Title..."
             value={sessionTitleInput}
             onChange={(e) => setSessionTitleInput(e.target.value)}
             style={{
-              padding: '0.6rem 0.8rem',
-              borderRadius: '8px',
-              border: '1px solid var(--border-color)',
-              background: 'var(--bg-input)',
-              color: '#fff',
+              width: '100%',
+              padding: '0.75rem 1rem',
               fontSize: '0.875rem'
             }}
           />
           <button
             type="submit"
             style={{
-              padding: '0.6rem',
-              borderRadius: '8px',
-              border: 'none',
-              background: 'var(--primary)',
+              padding: '0.75rem',
+              borderRadius: '12px',
+              background: 'var(--accent-gradient)',
               color: '#fff',
               fontWeight: '600',
-              fontSize: '0.85rem',
-              cursor: 'pointer'
+              fontSize: '0.875rem',
+              boxShadow: '0 4px 14px var(--accent-glow)'
             }}
           >
             + Create Session
           </button>
         </form>
 
-        <hr style={{ borderColor: 'var(--border-color)', margin: '0.5rem 0' }} />
+        {/* Saved Sessions List */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', overflowY: 'auto', maxHeight: '550px', paddingRight: '0.2rem' }}>
+          <h3 style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-tertiary)', marginBottom: '0.2rem' }}>
+            Saved Sessions ({sessionsList.length})
+          </h3>
 
-        {/* Sessions List */}
-        <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {loadingSessions ? (
-            <p style={{ fontSize: '0.85rem', color: '#6b7280', textAlign: 'center' }}>Loading sessions...</p>
+            <p style={{ color: 'var(--text-tertiary)', fontSize: '0.85rem' }}>Loading sessions...</p>
           ) : sessionsList.length === 0 ? (
-            <p style={{ fontSize: '0.85rem', color: '#6b7280', textAlign: 'center', marginTop: '1rem' }}>
-              No study sessions saved yet.
-            </p>
+            <p style={{ color: 'var(--text-tertiary)', fontSize: '0.85rem' }}>No study sessions yet.</p>
           ) : (
             sessionsList.map((item) => {
               const isSelected = session && session.id === item.id
@@ -481,19 +488,17 @@ export default function StudySessionRecorder() {
                   key={item.id}
                   onClick={() => loadSessionDetail(item.id)}
                   style={{
-                    padding: '0.8rem',
-                    borderRadius: '8px',
-                    background: isSelected ? 'var(--primary-light)' : 'var(--bg-input)',
-                    border: isSelected ? '1px solid var(--primary)' : '1px solid var(--border-color)',
+                    padding: '0.85rem 1rem',
+                    borderRadius: '14px',
+                    background: isSelected ? 'var(--glass-bg-active)' : 'var(--glass-bg)',
+                    border: isSelected ? '1px solid var(--glass-border-accent)' : '1px solid var(--glass-border)',
+                    boxShadow: isSelected ? '0 8px 20px -6px rgba(99, 102, 241, 0.25)' : 'none',
                     cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '0.3rem'
+                    transition: 'all 0.2s ease'
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontWeight: '600', fontSize: '0.9rem', color: isSelected ? '#c084fc' : '#f3f4f6' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.3rem' }}>
+                    <span style={{ fontWeight: '600', fontSize: '0.9rem', color: isSelected ? '#a5b4fc' : 'var(--text-primary)' }}>
                       {item.title}
                     </span>
                     <button
@@ -501,19 +506,20 @@ export default function StudySessionRecorder() {
                       title="Delete Session"
                       style={{
                         background: 'transparent',
-                        border: 'none',
-                        color: '#ef4444',
-                        cursor: 'pointer',
-                        fontSize: '0.8rem',
-                        opacity: 0.7
+                        color: 'var(--text-tertiary)',
+                        fontSize: '0.85rem',
+                        padding: '0.2rem 0.4rem',
+                        borderRadius: '6px'
                       }}
+                      onMouseEnter={(e) => e.target.style.color = 'var(--accent-rose)'}
+                      onMouseLeave={(e) => e.target.style.color = 'var(--text-tertiary)'}
                     >
                       ✕
                     </button>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#9ca3af' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
                     <span>⏱ {formatTime(item.total_duration_sec)}</span>
-                    <span>❓ {item.num_questions || 0} Qs</span>
+                    <span>💬 {item.num_questions || 0} Qs</span>
                   </div>
                 </div>
               )
@@ -526,11 +532,26 @@ export default function StudySessionRecorder() {
       <main style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         
         {!session ? (
-          <div className="card-panel" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
-            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎓</div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#f3f4f6' }}>Welcome to Study Session Recorder</h2>
-            <p style={{ color: '#9ca3af', maxWidth: '450px', margin: '0.5rem auto 1.5rem auto' }}>
-              Create a new study session from the left sidebar to start recording screen, slides, and audio with automatic RAG Q&A synthesis.
+          <div className="card-panel" style={{ textAlign: 'center', padding: '5rem 2rem' }}>
+            <div style={{
+              width: '64px',
+              height: '64px',
+              margin: '0 auto 1.5rem auto',
+              borderRadius: '20px',
+              background: 'var(--accent-gradient)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '2rem',
+              boxShadow: '0 10px 25px var(--accent-glow)'
+            }}>
+              🎓
+            </div>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: '700', letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
+              Study Session Explainer
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', maxWidth: '460px', margin: '0.75rem auto 1.5rem auto', fontSize: '0.95rem' }}>
+              Select or create a study session to record screen slides, keyframes, and spoken audio for visual vector search and AI Q&A.
             </p>
           </div>
         ) : (
@@ -538,19 +559,19 @@ export default function StudySessionRecorder() {
             {/* Header Card */}
             <div className="card-panel" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <h2 style={{ fontSize: '1.4rem', fontWeight: '700', color: '#f3f4f6', margin: 0 }}>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: '700', letterSpacing: '-0.02em', color: 'var(--text-primary)', margin: 0 }}>
                   {session.title}
                 </h2>
-                <p style={{ fontSize: '0.8rem', color: '#6b7280', marginTop: '0.2rem' }}>
-                  ID: {session.id}
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginTop: '0.2rem', fontFamily: 'JetBrains Mono, monospace' }}>
+                  {session.id}
                 </p>
               </div>
 
               {/* Timer Display & Record Controls */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '1.8rem', fontWeight: '700', color: '#f3f4f6' }}>
-                    ⏱ {formatTime(cumulativeSeconds)}
+                  <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '1.85rem', fontWeight: '700', color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>
+                    {formatTime(cumulativeSeconds)}
                   </div>
                   <span className={`status-pill ${recordingState}`}>
                     {recordingState}
@@ -562,16 +583,16 @@ export default function StudySessionRecorder() {
                     <button
                       onClick={handleStartRecording}
                       style={{
-                        padding: '0.6rem 1.2rem',
-                        borderRadius: '8px',
-                        border: 'none',
-                        background: '#10b981',
+                        padding: '0.65rem 1.4rem',
+                        borderRadius: '12px',
+                        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
                         color: '#fff',
                         fontWeight: '600',
-                        cursor: 'pointer'
+                        fontSize: '0.9rem',
+                        boxShadow: '0 4px 14px rgba(16, 185, 129, 0.3)'
                       }}
                     >
-                      ▶ Start Record
+                      ▶ Start Recording
                     </button>
                   )}
 
@@ -579,13 +600,13 @@ export default function StudySessionRecorder() {
                     <button
                       onClick={handlePauseRecording}
                       style={{
-                        padding: '0.6rem 1.2rem',
-                        borderRadius: '8px',
-                        border: 'none',
-                        background: '#f59e0b',
-                        color: '#000',
+                        padding: '0.65rem 1.4rem',
+                        borderRadius: '12px',
+                        background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                        color: '#fff',
                         fontWeight: '600',
-                        cursor: 'pointer'
+                        fontSize: '0.9rem',
+                        boxShadow: '0 4px 14px rgba(245, 158, 11, 0.3)'
                       }}
                     >
                       ⏸ Pause
@@ -596,13 +617,13 @@ export default function StudySessionRecorder() {
                     <button
                       onClick={handleResumeRecording}
                       style={{
-                        padding: '0.6rem 1.2rem',
-                        borderRadius: '8px',
-                        border: 'none',
-                        background: '#3b82f6',
+                        padding: '0.65rem 1.4rem',
+                        borderRadius: '12px',
+                        background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
                         color: '#fff',
                         fontWeight: '600',
-                        cursor: 'pointer'
+                        fontSize: '0.9rem',
+                        boxShadow: '0 4px 14px rgba(99, 102, 241, 0.3)'
                       }}
                     >
                       ▶ Resume
@@ -613,13 +634,13 @@ export default function StudySessionRecorder() {
                     <button
                       onClick={handleStopRecording}
                       style={{
-                        padding: '0.6rem 1.2rem',
-                        borderRadius: '8px',
-                        border: 'none',
-                        background: '#ef4444',
+                        padding: '0.65rem 1.4rem',
+                        borderRadius: '12px',
+                        background: 'linear-gradient(135deg, #f43f5e 0%, #e11d48 100%)',
                         color: '#fff',
                         fontWeight: '600',
-                        cursor: 'pointer'
+                        fontSize: '0.9rem',
+                        boxShadow: '0 4px 14px rgba(244, 63, 94, 0.3)'
                       }}
                     >
                       ⏹ Stop
@@ -630,33 +651,33 @@ export default function StudySessionRecorder() {
             </div>
 
             {/* Navigation Tabs */}
-            <div style={{ display: 'flex', gap: '1rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
+            <div style={{ display: 'flex', gap: '0.5rem', background: 'var(--glass-bg)', padding: '0.35rem', borderRadius: '14px', border: '1px solid var(--glass-border)', width: 'fit-content' }}>
               <button
                 onClick={() => setActiveTab('record')}
                 style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: activeTab === 'record' ? '#c084fc' : '#9ca3af',
-                  fontWeight: activeTab === 'record' ? '700' : '500',
-                  fontSize: '0.95rem',
-                  cursor: 'pointer',
-                  borderBottom: activeTab === 'record' ? '2px solid #c084fc' : 'none',
-                  paddingBottom: '0.5rem'
+                  background: activeTab === 'record' ? 'var(--glass-bg-active)' : 'transparent',
+                  border: activeTab === 'record' ? '1px solid var(--glass-border-accent)' : '1px solid transparent',
+                  color: activeTab === 'record' ? '#a5b4fc' : 'var(--text-secondary)',
+                  fontWeight: activeTab === 'record' ? '600' : '500',
+                  fontSize: '0.875rem',
+                  padding: '0.5rem 1.1rem',
+                  borderRadius: '10px',
+                  boxShadow: activeTab === 'record' ? '0 4px 12px rgba(99, 102, 241, 0.15)' : 'none'
                 }}
               >
-                📹 Recording & Ask
+                📹 Recording & Query
               </button>
               <button
                 onClick={() => setActiveTab('history')}
                 style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: activeTab === 'history' ? '#c084fc' : '#9ca3af',
-                  fontWeight: activeTab === 'history' ? '700' : '500',
-                  fontSize: '0.95rem',
-                  cursor: 'pointer',
-                  borderBottom: activeTab === 'history' ? '2px solid #c084fc' : 'none',
-                  paddingBottom: '0.5rem'
+                  background: activeTab === 'history' ? 'var(--glass-bg-active)' : 'transparent',
+                  border: activeTab === 'history' ? '1px solid var(--glass-border-accent)' : '1px solid transparent',
+                  color: activeTab === 'history' ? '#a5b4fc' : 'var(--text-secondary)',
+                  fontWeight: activeTab === 'history' ? '600' : '500',
+                  fontSize: '0.875rem',
+                  padding: '0.5rem 1.1rem',
+                  borderRadius: '10px',
+                  boxShadow: activeTab === 'history' ? '0 4px 12px rgba(99, 102, 241, 0.15)' : 'none'
                 }}
               >
                 💬 Q&A History ({qaHistory.length})
@@ -668,10 +689,10 @@ export default function StudySessionRecorder() {
                 {/* Segments Processing Status */}
                 {segments.length > 0 && (
                   <div className="card-panel">
-                    <h4 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.75rem', color: '#f3f4f6' }}>
-                      ⚡ Segment Processing Pipeline
+                    <h4 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.85rem', color: 'var(--text-primary)' }}>
+                      ⚡ Visual & Vector Pipeline Status
                     </h4>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
                       {segments.map((seg, idx) => (
                         <div
                           key={idx}
@@ -679,14 +700,14 @@ export default function StudySessionRecorder() {
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
-                            padding: '0.6rem 0.8rem',
-                            background: 'var(--bg-input)',
-                            borderRadius: '6px',
-                            border: '1px solid var(--border-color)'
+                            padding: '0.75rem 1rem',
+                            background: 'var(--glass-bg)',
+                            borderRadius: '12px',
+                            border: '1px solid var(--glass-border)'
                           }}
                         >
-                          <span style={{ fontSize: '0.85rem', color: '#d1d5db' }}>
-                            Segment #{seg.segment_index ?? seg.index} (Start offset: {formatTime(seg.start_offset_sec ?? seg.startOffset)})
+                          <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                            Segment #{seg.segment_index ?? seg.index} <span style={{ color: 'var(--text-tertiary)' }}>(Offset: {formatTime(seg.start_offset_sec ?? seg.startOffset)})</span>
                           </span>
                           <span className={`status-pill ${seg.status}`}>
                             {seg.status}
@@ -698,12 +719,14 @@ export default function StudySessionRecorder() {
                 )}
 
                 {/* Ask Question Section */}
-                <div className="card-panel" style={{ border: '1px solid rgba(124, 58, 237, 0.4)' }}>
-                  <h3 style={{ fontSize: '1.1rem', fontWeight: '700', marginBottom: '0.75rem', color: '#c084fc' }}>
-                    🤖 Ask Ollama About This Session
+                <div className="card-panel">
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: '600', marginBottom: '0.85rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <span style={{ background: 'var(--accent-gradient)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                      Ask About This Session
+                    </span>
                   </h3>
                   
-                  <form onSubmit={handleAskQuestion} style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem' }}>
+                  <form onSubmit={handleAskQuestion} style={{ display: 'flex', gap: '0.65rem', marginBottom: '1.25rem' }}>
                     <input
                       type="text"
                       placeholder="Ask anything explained in this session..."
@@ -711,26 +734,22 @@ export default function StudySessionRecorder() {
                       onChange={(e) => setQuestionInput(e.target.value)}
                       style={{
                         flex: 1,
-                        padding: '0.75rem 1rem',
-                        borderRadius: '8px',
-                        border: '1px solid var(--border-color)',
-                        background: 'var(--bg-input)',
-                        color: '#fff',
-                        fontSize: '0.95rem'
+                        padding: '0.85rem 1.1rem',
+                        fontSize: '0.925rem'
                       }}
                     />
                     <button
                       type="submit"
                       disabled={asking}
                       style={{
-                        padding: '0.75rem 1.5rem',
-                        borderRadius: '8px',
-                        border: 'none',
-                        background: 'var(--primary)',
+                        padding: '0.85rem 1.6rem',
+                        borderRadius: '12px',
+                        background: 'var(--accent-gradient)',
                         color: '#fff',
                         fontWeight: '600',
-                        cursor: asking ? 'not-allowed' : 'pointer',
-                        opacity: asking ? 0.7 : 1
+                        fontSize: '0.925rem',
+                        opacity: asking ? 0.7 : 1,
+                        boxShadow: '0 4px 14px var(--accent-glow)'
                       }}
                     >
                       {asking ? 'Thinking...' : 'Ask'}
@@ -739,11 +758,11 @@ export default function StudySessionRecorder() {
 
                   {/* Latest Answer Result */}
                   {qaHistory.length > 0 && (
-                    <div style={{ background: 'var(--bg-input)', padding: '1.25rem', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                      <div style={{ fontWeight: '600', color: '#c084fc', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-                        Q: {qaHistory[0].question}
+                    <div style={{ background: 'var(--glass-bg)', padding: '1.25rem 1.5rem', borderRadius: '14px', border: '1px solid var(--glass-border)' }}>
+                      <div style={{ fontWeight: '600', color: '#a5b4fc', marginBottom: '0.6rem', fontSize: '0.925rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                        <span>❓</span> Q: {qaHistory[0].question}
                       </div>
-                      <div style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6', fontSize: '0.95rem', color: '#e5e7eb' }}>
+                      <div style={{ whiteSpace: 'pre-wrap', lineHeight: '1.65', fontSize: '0.925rem', color: 'var(--text-primary)' }}>
                         {qaHistory[0].answer}
                       </div>
                     </div>
@@ -753,32 +772,32 @@ export default function StudySessionRecorder() {
             ) : (
               /* Q&A History Tab */
               <div className="card-panel" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#f3f4f6' }}>
-                  📜 Session Question & Answer Log
+                <h3 style={{ fontSize: '1.15rem', fontWeight: '600', color: 'var(--text-primary)' }}>
+                  Session Question & Answer History
                 </h3>
                 {qaHistory.length === 0 ? (
-                  <p style={{ color: '#9ca3af', fontSize: '0.9rem' }}>No questions asked for this session yet.</p>
+                  <p style={{ color: 'var(--text-tertiary)', fontSize: '0.9rem' }}>No questions asked for this session yet.</p>
                 ) : (
                   qaHistory.map((item, idx) => (
                     <div
                       key={item.id || idx}
                       style={{
-                        background: 'var(--bg-input)',
-                        padding: '1rem 1.25rem',
-                        borderRadius: '8px',
-                        border: '1px solid var(--border-color)',
+                        background: 'var(--glass-bg)',
+                        padding: '1.25rem 1.5rem',
+                        borderRadius: '14px',
+                        border: '1px solid var(--glass-border)',
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '0.5rem'
+                        gap: '0.6rem'
                       }}
                     >
-                      <div style={{ fontWeight: '700', color: '#c084fc', fontSize: '0.95rem' }}>
+                      <div style={{ fontWeight: '600', color: '#a5b4fc', fontSize: '0.95rem' }}>
                         ❓ Question: {item.question}
                       </div>
-                      <div style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6', fontSize: '0.9rem', color: '#d1d5db' }}>
+                      <div style={{ whiteSpace: 'pre-wrap', lineHeight: '1.65', fontSize: '0.925rem', color: 'var(--text-primary)' }}>
                         {item.answer}
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: '#6b7280', textAlign: 'right' }}>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)', textAlign: 'right' }}>
                         {new Date(item.created_at).toLocaleTimeString()}
                       </div>
                     </div>
