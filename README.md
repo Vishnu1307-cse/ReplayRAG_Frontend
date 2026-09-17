@@ -1,84 +1,59 @@
-# 🎓 Study Session Recorder & AI RAG Assistant
+# ReplayRAG Frontend
 
-An AI-powered web application that records study sessions, lecture videos, or slide presentations in real-time, extracts keyframes, performs audio transcription and visual OCR, and provides a RAG-based Q&A interface powered by local **Ollama (Llama 3.2)**.
+A React and Vite web application for recording study sessions, lecture videos, or slide presentations, and interacting with an AI assistant that answers questions about the recorded content.
 
----
+## Overview
 
-## 🚀 Quick Start Guide
+ReplayRAG Frontend is the client interface for the ReplayRAG platform. It lets users capture their screen and audio in real time, manage recording sessions, and query a local retrieval-augmented generation (RAG) assistant powered by Ollama (Llama 3.2). The assistant answers questions with references to exact timestamps in the recording.
 
-### Prerequisites
-- **Python 3.9+** & **Node.js 18+**
-- **FFmpeg** installed on system (`sudo apt install ffmpeg` on Ubuntu/Linux)
-- **Ollama** installed on Linux (`curl -fsSL https://ollama.com/install.sh | sh`)
+## Features
 
----
+- Screen and audio capture with start, pause, resume, and stop controls
+- Session-based organization of recordings
+- Chat interface to ask questions about a session's content
+- Timestamp-referenced answers from the RAG assistant
+- Persistent Q&A history per session
 
-## 🛠️ Step 1: Start Ollama (LLM Engine)
+## Tech Stack
 
-In a new terminal window:
-```bash
-# Start Ollama service
-ollama serve
+- React
+- Vite
+- JavaScript
 
-# Pull Llama 3.2 model (run once)
-ollama pull llama3.2
-```
+## Prerequisites
 
----
+- Node.js 18+
+- The [ReplayRAG Backend](https://github.com/Vishnu1307-cse/ReplayRAG_Backend) running locally
+- Ollama installed and running with the `llama3.2` model pulled
 
-## 🐍 Step 2: Set Up & Run Backend
+## Getting Started
 
-1. Navigate to the backend folder:
-   ```bash
-   cd backend
+1. Install dependencies:
+
    ```
-
-2. Create and activate a virtual environment:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
-
-3. Install required Python packages:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Start the FastAPI server:
-   ```bash
-   uvicorn main:app --reload --port 8000
-   ```
-   *Backend will run at `http://localhost:8000`*
-
----
-
-## 💻 Step 3: Set Up & Run Frontend
-
-1. Open a new terminal window and navigate to the frontend folder:
-   ```bash
-   cd frontend
-   ```
-
-2. Install Node dependencies:
-   ```bash
    npm install
    ```
 
-3. Start Vite development server:
-   ```bash
+2. Start the development server:
+
+   ```
    npm run dev
    ```
-   *Frontend will run at `http://localhost:5173`*
 
----
+3. Open the app at `http://localhost:5173`. Ensure the backend is running at `http://localhost:8000`.
 
-## 📖 How to Use the App
+## Usage
 
-1. **Create a Session**: Enter a title (e.g. `Lecture 1 - Machine Learning`) in the left sidebar and click **+ Create Session**.
-2. **Start Recording**: Click **▶ Start Record**. Select the tab or window you want to capture (make sure to check **"Share audio"** in the browser pop-up to capture system sound, plus grant microphone access).
-3. **Pause / Resume**: You can pause and resume at any time. Segments are processed asynchronously in the background.
-4. **Ask Questions**:
-   - Type a question in the **🤖 Ask Ollama About This Session** section and hit **Ask**.
-   - If a recording is live, it automatically flushes the current segment and submits it for processing.
-   - Ollama synthesizes natural answers citing exact timestamps (e.g. `(01:15 - 01:45)`).
-5. **Session History**: All saved sessions and their past Q&A logs are stored under the **💬 Q&A History** tab and saved permanently in your local database.
+1. Create a new session by entering a title.
+2. Start recording and select the tab or window to capture, enabling audio sharing.
+3. Pause or resume the recording as needed; segments are processed in the background.
+4. Ask questions about the session content through the chat interface.
+5. Review past sessions and their Q&A history at any time.
+
+## Related
+
+- [ReplayRAG Backend](https://github.com/Vishnu1307-cse/ReplayRAG_Backend) — FastAPI service handling transcription, keyframe extraction, and the RAG pipeline.
+
+## License
+
+Not specified.
